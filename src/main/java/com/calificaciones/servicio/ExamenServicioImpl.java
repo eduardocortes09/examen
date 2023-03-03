@@ -24,8 +24,6 @@ import java.util.Optional;
 @Service
 public class ExamenServicioImpl implements ExamenService {
 
-
-
     @Autowired
     private AlumnoRepository alumnoRepository;
 
@@ -64,7 +62,6 @@ public class ExamenServicioImpl implements ExamenService {
 
     public ResponseGeneral crearExamen(String nombrePregunta) {
 
-
         Pregunta pregunta = new Pregunta();
 
         pregunta.setPregunta(nombrePregunta);
@@ -81,10 +78,8 @@ public class ExamenServicioImpl implements ExamenService {
     }
 
 
-
     @Override
     public ResponseGeneral obtenerPreguntas() {
-
 
         ResponseGeneral responseGeneral = new ResponseGeneral();
 
@@ -92,41 +87,33 @@ public class ExamenServicioImpl implements ExamenService {
 
         List<ResponsePreguntas> listResponsePreguntas = new ArrayList<>();
 
-        for (Pregunta pregunta : listPreguntas) {
-
+        listPreguntas.stream().forEach((p) -> {
             List<Opcion> listOpciones = new ArrayList<>();
 
-            List<Opcion>  listOpcion = opcionRepository.findByPreguntaId(pregunta.getId());
+            List<Opcion> listOpcion = opcionRepository.findByPreguntaId(p.getId());
 
-
-            for (Opcion opt : listOpcion) {
-
+            listOpcion.stream().forEach((opt) -> {
                 Opcion opcion = new Opcion();
                 opcion.setId(opt.getId());
                 opcion.setOpcion(opt.getOpcion());
                 opcion.setCorrecta(opt.getCorrecta());
                 opcion.setPregunta(null);
                 listOpciones.add(opcion);
-
-            }
+            });
 
             ResponsePreguntas responsePreguntas = new ResponsePreguntas();
 
-            responsePreguntas.setId(pregunta.getId());
-            responsePreguntas.setPregunta(pregunta.getPregunta());
+            responsePreguntas.setId(p.getId());
+            responsePreguntas.setPregunta(p.getPregunta());
 
             responsePreguntas.setListOpcion(listOpciones);
 
             listResponsePreguntas.add(responsePreguntas);
-
-        }
-
+        });
 
         responseGeneral.setCode(200);
         responseGeneral.setMessage("sucess");
         responseGeneral.setResponse(listResponsePreguntas);
-
-
 
         return responseGeneral;
     }
@@ -136,7 +123,7 @@ public class ExamenServicioImpl implements ExamenService {
 
         ResponseGeneral responseGeneral = new ResponseGeneral();
 
-     Optional<Pregunta> preguntas = preguntaRepository.findById(idPregunta);
+        Optional<Pregunta> preguntas = preguntaRepository.findById(idPregunta);
 
         preguntas.ifPresent(ques -> {
             Opcion opcion = new Opcion();
@@ -147,13 +134,13 @@ public class ExamenServicioImpl implements ExamenService {
             opcionRepository.save(opcion);
         });
 
-        if(!preguntas.isPresent()){
+        if (!preguntas.isPresent()) {
 
             responseGeneral.setCode(401);
             responseGeneral.setMessage("not found");
             responseGeneral.setResponse("");
 
-        }else {
+        } else {
             responseGeneral.setCode(201);
             responseGeneral.setMessage("sucess");
             responseGeneral.setResponse("OK:");
@@ -163,7 +150,7 @@ public class ExamenServicioImpl implements ExamenService {
     }
 
 
-    public ResponseGeneral hacerExamen(Integer idAlumno,Integer idPregunta, Long idOpcion){
+    public ResponseGeneral hacerExamen(Integer idAlumno, Integer idPregunta, Long idOpcion) {
 
         ResponseGeneral responseGeneral = new ResponseGeneral();
 
@@ -181,10 +168,9 @@ public class ExamenServicioImpl implements ExamenService {
 
             opcion.ifPresent(opt -> {
 
-                if(opt.getCorrecta() == 1){
+                if (opt.getCorrecta() == 1) {
                     respuesta.setPorcentaje(25);
-                }
-                else{
+                } else {
                     respuesta.setPorcentaje(0);
                 }
 
@@ -208,7 +194,7 @@ public class ExamenServicioImpl implements ExamenService {
     }
 
 
-    public ResponseGeneral daCalificacionAlumno(Long idAlumno){
+    public ResponseGeneral daCalificacionAlumno(Long idAlumno) {
 
         ResponseGeneral responseGeneral = new ResponseGeneral();
 
@@ -216,18 +202,17 @@ public class ExamenServicioImpl implements ExamenService {
 
         Optional<Alumno> listAlumno = alumnoRepository.findById(idAlumno);
 
+        List<Respuesta> listRespuesta = respuestaRepository.getByAlumnoId(idAlumno);
 
-       List<Respuesta> listRespuesta = respuestaRepository.getByAlumnoId(idAlumno);
+        ResponseCalificaciones responseCalif = new ResponseCalificaciones();
 
-            ResponseCalificaciones responseCalif = new ResponseCalificaciones();
+        responseCalif.setNombre(listAlumno.get().getNombre());
 
-            responseCalif.setNombre(listAlumno.get().getNombre());
+        int promedioFinal = calculaCalificacion(listRespuesta.size(), listRespuesta);
 
-            int promedioFinal = calculaCalificacion(listRespuesta.size(), listRespuesta);
+        responseCalif.setCalificacion(promedioFinal);
 
-            responseCalif.setCalificacion(promedioFinal);
-
-            listResponseCalificaciones.add(responseCalif);
+        listResponseCalificaciones.add(responseCalif);
 
         responseGeneral.setCode(200);
         responseGeneral.setMessage("sucess");
@@ -238,44 +223,35 @@ public class ExamenServicioImpl implements ExamenService {
     }
 
 
-
-    public ResponseGeneral daHoraLocal(Integer anio, Integer mes, Integer dia, Integer hora){
+    public ResponseGeneral daHoraLocal(Integer anio, Integer mes, Integer dia, Integer hora) {
 
         ZonedDateTime zonaBogota = ZonedDateTime.of(anio, mes, dia, hora, 00, 00, 00, ZoneId.of("America/Bogota"));
 
-        ZonedDateTime fechaNueva =  zonaBogota.withZoneSameInstant(ZoneId.of("America/Mexico_City"));
-
+        ZonedDateTime fechaNueva = zonaBogota.withZoneSameInstant(ZoneId.of("America/Mexico_City"));
 
         ResponseGeneral responseGeneral = new ResponseGeneral();
 
-
         responseGeneral.setCode(200);
         responseGeneral.setMessage("sucess");
-        responseGeneral.setResponse("hora local:" + fechaNueva );
+        responseGeneral.setResponse("hora local:" + fechaNueva);
 
         return responseGeneral;
 
     }
 
-
-    public Integer calculaCalificacion (Integer numero, List<Respuesta> respuesta)  {
+    public Integer calculaCalificacion(Integer numero, List<Respuesta> respuesta) {
 
         int suma = 0;
         int calificacionD;
 
         for (int i = 0; i <= numero; i++) {
 
-            if(i <= numero-1) {
+            if (i <= numero - 1) {
                 calificacionD = respuesta.get(i).getPorcentaje();
                 suma = suma + calificacionD;
             }
         }
-
         return suma;
-
-
-
     }
-
 
 }

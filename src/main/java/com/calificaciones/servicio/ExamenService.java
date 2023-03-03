@@ -2,8 +2,6 @@ package com.calificaciones.servicio;
 
 import com.calificaciones.model.ResponseGeneral;
 
-import java.time.ZonedDateTime;
-
 public interface ExamenService {
 
     public ResponseGeneral crearAlumno(String nombre, Integer edad,  String ciudad, String zonaHoraria);

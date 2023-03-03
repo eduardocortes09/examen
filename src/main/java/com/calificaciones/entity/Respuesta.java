@@ -1,6 +1,5 @@
 package com.calificaciones.entity;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
