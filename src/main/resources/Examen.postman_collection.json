@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "72ae782d-fe47-4400-ae19-e507d858ad32",
+		"name": "Examen",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9277928"
+	},
+	"item": [
+		{
+			"name": "listaPreguntas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/listaPreguntas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"listaPreguntas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hacerExamen",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/hacerExamen/1/1/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hacerExamen",
+						"1",
+						"1",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getZonaHoraria",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/getZonaHoraria/2023/3/3/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"getZonaHoraria",
+						"2023",
+						"3",
+						"3",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCalificacionPorAlumno",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/getCalificacionPorAlumno/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"getCalificacionPorAlumno",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crearExamen",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/crearExamen/quien es el presidente de mexico",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crearExamen",
+						"quien es el presidente de mexico"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crearAlumno",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/crearAlumno/raul/23/CDMX/America-Mexico_City",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crearAlumno",
+						"raul",
+						"23",
+						"CDMX",
+						"America-Mexico_City"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "creaOpcionesPorPregunta",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/creaOpcionesPorPregunta/4/peje/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"creaOpcionesPorPregunta",
+						"4",
+						"peje",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
